@@ -1,0 +1,79 @@
+{
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#d45d35", // Change this to your desired background color
+        "titleBar.activeForeground": "#f6f6f6", // Change this to your desired text color
+        "titleBar.inactiveBackground": "#77331d", // Change this to your desired background color for inactive state
+    },
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.lineHeight": 1.2,
+    "terminal.integrated.cursorStyle": "line",
+    "terminal.integrated.cursorWidth": 4,
+    "terminal.integrated.cursorBlinking": false,
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/node_modules/**": true,
+        "**/*.log": true,
+        "**/bin": true,
+        "**/bin/**": true,
+        "**/obj": true,
+        "**/obj/**": true
+    },
+    "explorer.compactFolders": false,
+    "better-comments.tags": [
+        {
+            "tag": "!",
+            "color": "#FF6961",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "?",
+            "color": "#AEC6CF",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "//",
+            "color": "#474747",
+            "strikethrough": true,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "[]",
+            "color": "#FEFE95",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "[x]",
+            "color": "#FEFE95",
+            "strikethrough": true,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "*",
+            "color": "#B19CD9",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        }
+    ],
+    "dotnet.defaultSolution": "DungeonSlime.sln"
+}

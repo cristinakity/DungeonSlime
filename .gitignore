@@ -13,8 +13,6 @@ out/
 .DS_Store
 Thumbs.db
 
-# Visual Studio Code
-.vscode/
 
 # Rider
 .idea/

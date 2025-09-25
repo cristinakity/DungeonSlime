@@ -13,7 +13,9 @@
         "**/node_modules": true,
         "**/node_modules/**": true,
         "**/obj": true,
-        "**/obj/**": true
+        "**/obj/**": true,
+        "**/Temp": true,
+        "**/Temp/**": true
     },
     "explorer.compactFolders": false,
     "better-comments.tags": [

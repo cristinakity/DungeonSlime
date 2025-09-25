@@ -56,3 +56,5 @@ secrets.json
 # Dotnet watch
 **/node_modules/
 **/bower_components/
+
+/Temp/**

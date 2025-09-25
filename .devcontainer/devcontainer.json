@@ -19,7 +19,9 @@
 		"-e",
 		"DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus",
 		"-e",
-		"DISPLAY=${env:DISPLAY}"
+		"DISPLAY=${env:DISPLAY}",
+		"-e",
+		"XAUTHORITY=/home/vscode/.Xauthority"
 	],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "bash .devcontainer/post-create.sh",
@@ -28,20 +30,16 @@
 		"vscode": {
 			"extensions": [
 				"ms-dotnettools.csdevkit",
-				"MonoGame.monogame-for-vscode",
 				"ms-dotnettools.csharp",
-				"aaron-bond.better-comments"
+				"aaron-bond.better-comments",
+				"r88.monogame"
 			]
 		}
 	},
-	"containerEnv": {
-		"DISPLAY": "${env:DISPLAY}"
-	},
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
 	"mounts": [
 		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
 		"source=/run/dbus,target=/run/dbus,type=bind",
-		"source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind"
+		"source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
+		"source=${localEnv:HOME}/.Xauthority,target=/home/vscode/.Xauthority,type=bind,consistency=cached"
 	]
 }

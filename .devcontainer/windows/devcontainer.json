@@ -1,0 +1,27 @@
+// Windows host variant (Docker Desktop / WSL2)
+// Copy of the main devcontainer with X11 specifics removed.
+// VS Code will show a variant selection if multiple devcontainer.json files exist.
+{
+  "name": "MonoGame .NET 8 (Windows Host)",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0",
+  "runArgs": [
+    // Enable GPU acceleration if available (optional)
+    // "--gpus=all",
+    "--device=/dev/dri:/dev/dri"
+  ],
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "aaron-bond.better-comments",
+        "r88.monogame"
+      ]
+    }
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+  ],
+  "onCreateCommand": "echo 'Using Windows host variant (no X11 socket mounts needed).'"
+}

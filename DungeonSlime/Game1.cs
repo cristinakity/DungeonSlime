@@ -2,38 +2,24 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using MonoGameLibrary;
 
 namespace DungeonSlime;
 
-public class Game1 : Game
+public class Game1 : Core
 {
-    private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
-    private double _totalTime = 0;
-    private readonly bool _headlessMode;
-
-    public Game1()
+    public Game1() : base("Dungeon Slime", 1280, 720, false)
     {
-        _graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
-        IsMouseVisible = true;
-        
-        // Check if running in headless mode 
-        _headlessMode = Environment.GetEnvironmentVariable("MONOGAME_HEADLESS") == "true";
     }
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
-
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-        // TODO: use this.Content to load your game content here
+        base.LoadContent();
     }
 
     protected override void Update(GameTime gameTime)
@@ -58,7 +44,22 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        // Console.WriteLine("gameTime.TotalGameTime.TotalSeconds: " + gameTime.TotalGameTime.TotalSeconds);
+
+        // Cambia el color de la pantalla cada 2 segundos, tipo arcoiris
+        Color[] rainbowColors = new Color[]
+        {
+            Color.Red,
+            Color.Orange,
+            Color.Yellow,
+            Color.Green,
+            Color.Blue,
+            Color.Indigo,
+            Color.Violet
+        };
+
+        int colorIndex = (int)((gameTime.TotalGameTime.TotalSeconds / 2) % rainbowColors.Length);
+        GraphicsDevice.Clear(rainbowColors[colorIndex]);
 
         // TODO: Add your drawing code here
 

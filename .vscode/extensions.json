@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "aaron-bond.better-comments",
+        "r88.monogame"
+    ]
+}

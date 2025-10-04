@@ -2,6 +2,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using MonoGameLibrary.Input;
 
 namespace MonoGameLibrary;
 
@@ -16,6 +18,8 @@ public class Core : Game
 
     public static SpriteBatch SpriteBatch { get; private set; }
     public static new ContentManager Content { get; private set; }
+    public static InputManager Input { get; private set; }
+    public static bool ExitOnEscape { get; set; }
 
     public Core(string title, int width, int height, bool fullscreen)
     {
@@ -41,6 +45,8 @@ public class Core : Game
         Content.RootDirectory = "Content";
 
         IsMouseVisible = true;
+
+        ExitOnEscape = true;
     }
 
     protected override void Initialize()
@@ -50,5 +56,19 @@ public class Core : Game
         GraphicsDevice = Graphics.GraphicsDevice;
 
         SpriteBatch = new SpriteBatch(GraphicsDevice);
+
+        Input = new InputManager();
+    }
+
+    protected override void Update(GameTime gameTime)
+    {
+        Input.Update(gameTime);
+
+        if (ExitOnEscape && Input.Keyboard.IsKeyDown(Keys.Escape))
+        {
+            Exit();
+        }
+
+        base.Update(gameTime);
     }
 }

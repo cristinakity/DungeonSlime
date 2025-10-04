@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameLibrary;
 using MonoGameLibrary.Graphics;
+using MonoGameLibrary.Input;
 
 namespace DungeonSlime;
 
@@ -52,30 +53,28 @@ public class Game1 : Core
 
     private void CheckKeyboardInput()
     {
-        var keyboardState = Keyboard.GetState();
-
         float speed = MOVEMENT_SPEED;
-        if (keyboardState.IsKeyDown(Keys.Space))
+        if (Input.Keyboard.IsKeyDown(Keys.Space))
         {
             speed *= 1.5f;
         }
 
-        if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+        if (Input.Keyboard.IsKeyDown(Keys.W) || Input.Keyboard.IsKeyDown(Keys.Up))
         {
             _slimePosition.Y -= speed;
         }
 
-        if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
+        if (Input.Keyboard.IsKeyDown(Keys.S) || Input.Keyboard.IsKeyDown(Keys.Down))
         {
             _slimePosition.Y += speed;
         }
 
-        if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
+        if (Input.Keyboard.IsKeyDown(Keys.A) || Input.Keyboard.IsKeyDown(Keys.Left))
         {
             _slimePosition.X -= speed;
         }
 
-        if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
+        if (Input.Keyboard.IsKeyDown(Keys.D) || Input.Keyboard.IsKeyDown(Keys.Right))
         {
             _slimePosition.X += speed;
         }
@@ -83,7 +82,7 @@ public class Game1 : Core
 
     private void CheckGamePadInput()
     {
-        var gamePadState = GamePad.GetState(PlayerIndex.One);
+        var gamePadState = Input.GamePads[(int)PlayerIndex.One];
 
         float speed = MOVEMENT_SPEED;
         if (gamePadState.IsButtonDown(Buttons.A))
@@ -107,10 +106,10 @@ public class Game1 : Core
         // }
 
 
-        if (gamePadState.ThumbSticks.Left != Vector2.Zero)
+        if (gamePadState.LeftThumbStick != Vector2.Zero)
         {
-            _slimePosition.X += gamePadState.ThumbSticks.Left.X * speed;
-            _slimePosition.Y -= gamePadState.ThumbSticks.Left.Y * speed;
+            _slimePosition.X += gamePadState.LeftThumbStick.X * speed;
+            _slimePosition.Y -= gamePadState.LeftThumbStick.Y * speed;
         }
         else
         {

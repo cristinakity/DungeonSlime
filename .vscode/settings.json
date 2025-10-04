@@ -4,6 +4,10 @@
         "titleBar.activeForeground": "#f6f6f6", // Change this to your desired text color
         "titleBar.inactiveBackground": "#77331d", // Change this to your desired background color for inactive state
     },
+    "editor.bracketPairColorization.enabled": true,
+    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+    "editor.guides.indentation": true,
+    "editor.guides.bracketPairs": true,
     "terminal.integrated.fontSize": 14,
     "terminal.integrated.lineHeight": 1.2,
     "terminal.integrated.cursorStyle": "line",

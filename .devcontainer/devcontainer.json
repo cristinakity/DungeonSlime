@@ -15,14 +15,19 @@
 	// }
 	"runArgs": [
 		"--device=/dev/dri:/dev/dri",
-		"--ipc=host",
-		"-e",
-		"DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus",
-		"-e",
-		"DISPLAY=${env:DISPLAY}",
-		"-e",
-		"XAUTHORITY=/home/vscode/.Xauthority"
+		"--device=/dev/input:/dev/input",
+		"--ipc=host"
 	],
+	"containerEnv": {
+		"DISPLAY": ":0",
+		"XDG_RUNTIME_DIR": "/run/user/1000",
+		"DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus",
+		"WAYLAND_DISPLAY": "wayland-0"
+	},
+	"remoteEnv": {
+		"DISPLAY": ":0",
+		"XDG_RUNTIME_DIR": "/run/user/1000"
+	},
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "bash .devcontainer/post-create.sh",
 	// Configure tool-specific properties.
@@ -37,9 +42,7 @@
 		}
 	},
 	"mounts": [
-		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
-		"source=/run/dbus,target=/run/dbus,type=bind",
 		"source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
-		"source=${localEnv:HOME}/.Xauthority,target=/home/vscode/.Xauthority,type=bind,consistency=cached"
+		"source=/run/user/1000,target=/run/user/1000,type=bind"
 	]
 }

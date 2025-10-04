@@ -1,15 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using MonoGameLibrary;
-using System.Runtime.InteropServices;
+using MonoGameLibrary.Graphics;
 
 namespace DungeonSlime;
 
 public class Game1 : Core
 {
-    private Texture2D _logo;
+    private AnimatedSprite _slime;
+    private AnimatedSprite _bat;
+    private Vector2 _slimePosition;
+    private const float MOVEMENT_SPEED = 5.0f;
     public Game1() : base("Dungeon Slime", 1280, 720, false)
     {
     }
@@ -22,7 +24,13 @@ public class Game1 : Core
     protected override void LoadContent()
     {
         base.LoadContent();
-        _logo = Content.Load<Texture2D>("images/logo");
+        TextureAtlas atlas = TextureAtlas.FromFile(Content, "images/atlas-definition.xml");
+
+        _slime = atlas.CreateAnimatedSprite("slime-animation");
+        _slime.Scale = new Vector2(4.0f, 4.0f);
+
+        _bat = atlas.CreateAnimatedSprite("bat-animation");
+        _bat.Scale = new Vector2(4.0f, 4.0f);
     }
 
     protected override void Update(GameTime gameTime)
@@ -30,85 +38,119 @@ public class Game1 : Core
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // Auto-exit after 3 seconds in headless mode for testing (disabled for VNC)
-        // if (_headlessMode)
-        // {
-        //     _totalTime += gameTime.ElapsedGameTime.TotalSeconds;
-        //     if (_totalTime >= 3.0)
-        //     {
-        //         Exit();
-        //     }
-        // }
-
         // TODO: Add your update logic here
+
+        _slime.Update(gameTime);
+        _bat.Update(gameTime);
+
+        CheckKeyboardInput();
+
+        CheckGamePadInput();
 
         base.Update(gameTime);
     }
 
+    private void CheckKeyboardInput()
+    {
+        var keyboardState = Keyboard.GetState();
+
+        float speed = MOVEMENT_SPEED;
+        if (keyboardState.IsKeyDown(Keys.Space))
+        {
+            speed *= 1.5f;
+        }
+
+        if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
+        {
+            _slimePosition.Y -= speed;
+        }
+
+        if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
+        {
+            _slimePosition.Y += speed;
+        }
+
+        if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
+        {
+            _slimePosition.X -= speed;
+        }
+
+        if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
+        {
+            _slimePosition.X += speed;
+        }
+    }
+
+    private void CheckGamePadInput()
+    {
+        var gamePadState = GamePad.GetState(PlayerIndex.One);
+
+        float speed = MOVEMENT_SPEED;
+        if (gamePadState.IsButtonDown(Buttons.A))
+        {
+            speed *= 1.5f;
+            GamePad.SetVibration(PlayerIndex.One, 1.0f, 1.0f);
+        }
+        else
+        {
+            GamePad.SetVibration(PlayerIndex.One, 0.0f, 0.0f);
+        }
+
+        // if (gamePadState.IsButtonDown(Buttons.B))
+        // {
+        //     speed *= 1.5f;
+        //     GamePad.SetVibration(PlayerIndex.One, 1.0f, 0.0f);
+        // }
+        // else
+        // {
+        //     GamePad.SetVibration(PlayerIndex.One, 0.0f, 0.0f);
+        // }
+
+
+        if (gamePadState.ThumbSticks.Left != Vector2.Zero)
+        {
+            _slimePosition.X += gamePadState.ThumbSticks.Left.X * speed;
+            _slimePosition.Y -= gamePadState.ThumbSticks.Left.Y * speed;
+        }
+        else
+        {
+            if (gamePadState.IsButtonDown(Buttons.DPadUp))
+            {
+                _slimePosition.Y -= speed;
+            }
+
+            if (gamePadState.IsButtonDown(Buttons.DPadDown))
+            {
+                _slimePosition.Y += speed;
+            }
+
+            if (gamePadState.IsButtonDown(Buttons.DPadLeft))
+            {
+                _slimePosition.X -= speed;
+            }
+
+            if (gamePadState.IsButtonDown(Buttons.DPadRight))
+            {
+                _slimePosition.X += speed;
+            }
+        }
+    }
+
     protected override void Draw(GameTime gameTime)
     {
-        // Console.WriteLine("gameTime.TotalGameTime.TotalSeconds: " + gameTime.TotalGameTime.TotalSeconds);
-
-        // // Cambia el color de la pantalla cada 2 segundos, tipo arcoiris
-        // Color[] rainbowColors = new Color[]
-        // {
-        //     Color.Red,
-        //     Color.Orange,
-        //     Color.Yellow,
-        //     Color.Green,
-        //     Color.Blue,
-        //     Color.Indigo,
-        //     Color.Violet
-        // };
-
         // int colorIndex = (int)((gameTime.TotalGameTime.TotalSeconds / 2) % rainbowColors.Length);
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        Rectangle iconSourceRect = new Rectangle(0, 0, 128, 128);
-        Rectangle wordmarkSourceRect = new Rectangle(150, 34, 458, 58);
+        SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-        // TODO: Add your drawing code here
-        SpriteBatch.Begin(sortMode: SpriteSortMode.FrontToBack);
+        // _slime.Draw(SpriteBatch, Vector2.Zero, Color.White, 0.0f, Vector2.One, 4.0f, SpriteEffects.None, 0.0f);
+        // _bat.Draw(SpriteBatch, new Vector2(_slime.Width * 4.0f + 10, 0), Color.White, 0.0f, Vector2.One, 4.0f, SpriteEffects.None, 1.0f);
+        // _slime.Draw(SpriteBatch, new Vector2((_slime.Width * 4.0f) * 2 + 10, 0), Color.White, 0.0f, Vector2.One, 4.0f, SpriteEffects.None, 0.0f);
 
-        // var logoPosition = new Vector2(
-        //     (Window.ClientBounds.Width * 0.5f) - (_logo.Width * 0.5f),
-        //     (Window.ClientBounds.Height * 0.5f) - (_logo.Height * 0.5f)
-        // );
-        SpriteBatch.Draw(
-            _logo,
-            new Vector2(
-                Window.ClientBounds.Width,
-                Window.ClientBounds.Height
-            ) * 0.5f,
-            iconSourceRect,
-            Color.White,
-            0.0f,
-            new Vector2(
-                iconSourceRect.Width,
-                iconSourceRect.Height
-            ) * 0.5f,
-            1.0f,
-            SpriteEffects.None,
-            1.0f
-        );
+        _slime.Draw(SpriteBatch, _slimePosition);
 
-        SpriteBatch.Draw(
-            _logo,
-            new Vector2(
-                Window.ClientBounds.Width,
-                Window.ClientBounds.Height
-            ) * 0.5f,
-            wordmarkSourceRect,
-            Color.White,
-            0.0f,
-            new Vector2(
-                wordmarkSourceRect.Width,
-                wordmarkSourceRect.Height
-            ) * 0.5f,
-            1.0f,
-            SpriteEffects.None,
-            0.0f
-        );
+        _bat.Draw(SpriteBatch, new Vector2(_slime.With + 10, 0));
+        _slime.Draw(SpriteBatch, new Vector2(_slime.With * 2 + 10, 0));
 
         SpriteBatch.End();
 

@@ -6,8 +6,8 @@ dotnet new install MonoGame.Templates.CSharp
 # Set up multiarch for wine32
 sudo dpkg --add-architecture i386
 
-# Install Xvfb (X Virtual Framebuffer) and required system packages
-sudo apt-get update && sudo apt-get install -y xvfb curl p7zip-full wine64 wine32:i386
+# Install Xvfb (X Virtual Framebuffer) and required system packages + gamepad tools
+sudo apt-get update && sudo apt-get install -y xvfb curl p7zip-full wine64 wine32:i386 joystick jstest-gtk evtest
 
 # Set up XDG_RUNTIME_DIR (use host if available, fallback to temp)
 if [ -d "/run/user/1000" ]; then
@@ -24,4 +24,8 @@ wget -qO- https://monogame.net/downloads/net8_mgfxc_wine_setup.sh | bash
 # Add environment variables to bashrc for persistent sessions
 echo "export XDG_RUNTIME_DIR=\"${XDG_RUNTIME_DIR}\"" >> ~/.bashrc
 echo '# DISPLAY will be inherited from host environment' >> ~/.bashrc
+
+# Set up gamepad/joystick permissions (minimal setup)
+sudo groupadd -f input || true
+sudo usermod -a -G input vscode || true
 

@@ -19,7 +19,7 @@ public class Sprite
 
     public float LayerDepth { get; set; } = 0.0f;
 
-    public float With => Region.Width * Scale.X;
+    public float Width => Region.Width * Scale.X;
 
     public float Height => Region.Height * Scale.Y;
 

@@ -9,6 +9,14 @@ sudo dpkg --add-architecture i386
 # Install Xvfb (X Virtual Framebuffer) and required system packages + gamepad tools
 sudo apt-get update && sudo apt-get install -y xvfb curl p7zip-full wine64 wine32:i386 joystick jstest-gtk evtest
 
+sudo apt-get update && sudo apt-get install -y libgtk-3-0 libgtk-3-dev libcanberra-gtk-module
+sudo apt-get update && sudo apt-get install -y fonts-cantarell libgtk-3-0 libgtk-3-dev libcanberra-gtk-module gtk-sharp3
+sudo apt-get install -y fonts-cantarell
+sudo apt-get install -y eog
+sudo apt-get install -y xdg-utils
+xdg-mime default eog.desktop image/png
+xdg-mime default eog.desktop image/jpeg image/jpg image/bmp image/gif image/tiff image/webp
+
 # Set up XDG_RUNTIME_DIR (use host if available, fallback to temp)
 if [ -d "/run/user/1000" ]; then
     export XDG_RUNTIME_DIR="/run/user/1000"

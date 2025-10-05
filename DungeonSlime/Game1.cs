@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,6 +22,7 @@ public class Game1 : Core
     private Rectangle _roomBounds;
     private SoundEffect _bounceSoundEffect;
     private SoundEffect _collectSoundEffect;
+    private Song _themeSong;
     public Game1() : base("Dungeon Slime", 1280, 720, false)
     {
     }
@@ -46,6 +48,8 @@ public class Game1 : Core
         _batPosition = new Vector2(_roomBounds.Left, _roomBounds.Top);
 
         AssignRandomBatVelocity();
+
+        Audio.PlaySong(_themeSong);
     }
 
     protected override void LoadContent()
@@ -65,16 +69,7 @@ public class Game1 : Core
         _bounceSoundEffect = Content.Load<SoundEffect>("audio/bounce");
         _collectSoundEffect = Content.Load<SoundEffect>("audio/collect");
 
-        Song theme = Content.Load<Song>("audio/theme");
-
-        if (MediaPlayer.State == MediaState.Playing)
-        {
-            MediaPlayer.Stop();
-        }
-
-        MediaPlayer.Play(theme);
-
-        MediaPlayer.IsRepeating = true;
+        _themeSong = Content.Load<Song>("audio/theme");
     }
 
     protected override void Update(GameTime gameTime)
@@ -148,7 +143,7 @@ public class Game1 : Core
             normal.Normalize();
             _batVelocity = Vector2.Reflect(_batVelocity, normal);
 
-            _bounceSoundEffect.Play();
+            Audio.PlaySoundEffect(_bounceSoundEffect);
         }
 
         _batPosition = newBatPosition;
@@ -165,7 +160,7 @@ public class Game1 : Core
 
             AssignRandomBatVelocity();
 
-            _collectSoundEffect.Play();
+            Audio.PlaySoundEffect(_collectSoundEffect);
         }
 
         base.Update(gameTime);
@@ -182,8 +177,26 @@ public class Game1 : Core
         _batVelocity = direction * MOVEMENT_SPEED;
     }
 
+    private StringBuilder GetPressedKeys()
+    {
+        var teclas = new StringBuilder();
+        teclas.AppendLine("Teclas presionadas:");
+
+        var pressedKeys = Input.Keyboard.CurrentState.GetPressedKeys();
+
+        if (pressedKeys.Length > 0)
+        {
+            foreach (var key in pressedKeys)
+            {
+                teclas.AppendLine($"- {key}");
+            }
+        }
+        return teclas;
+    }
+
     private void CheckKeyboardInput()
     {
+        //Console.WriteLine(GetPressedKeys());
         float speed = MOVEMENT_SPEED;
         if (Input.Keyboard.IsKeyDown(Keys.Space))
         {
@@ -208,6 +221,23 @@ public class Game1 : Core
         if (Input.Keyboard.IsKeyDown(Keys.D) || Input.Keyboard.IsKeyDown(Keys.Right))
         {
             _slimePosition.X += speed;
+        }
+
+        if (Input.Keyboard.WasKeyJustPressed(Keys.M))
+        {
+            Audio.ToggleMute();
+        }
+
+        if (Input.Keyboard.WasKeyJustReleased(Keys.OemPlus))
+        {
+            Audio.SongVolumen += 0.1f;
+            Audio.SoundEffectVolume += 0.1f;
+        }
+
+        if (Input.Keyboard.WasKeyJustReleased(Keys.OemMinus))
+        {
+            Audio.SongVolumen -= 0.1f;
+            Audio.SoundEffectVolume -= 0.1f;
         }
     }
 

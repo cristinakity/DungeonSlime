@@ -1,10 +1,13 @@
 using System;
+using System.Data.Common;
+using System.Net.NetworkInformation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameLibrary.Audio;
 using MonoGameLibrary.Input;
+using MonoGameLibrary.Scenes;
 
 namespace MonoGameLibrary;
 
@@ -13,6 +16,9 @@ public class Core : Game
     internal static Core s_instance;
 
     public static Core Instance => s_instance;
+
+    private static Scene s_activateScene;
+    private static Scene s_nextScene;
 
     public static GraphicsDeviceManager Graphics { get; private set; }
     public static new GraphicsDevice GraphicsDevice { get; private set; }
@@ -83,6 +89,53 @@ public class Core : Game
             Exit();
         }
 
+        if (s_nextScene != null)
+        {
+            TransitionScene();
+        }
+
+        if (s_activateScene != null)
+        {
+            s_activateScene.Update(gameTime);
+        }
+
         base.Update(gameTime);
+    }
+
+    protected override void Draw(GameTime gameTime)
+    {
+        if (s_activateScene != null)
+        {
+            s_activateScene.Draw(gameTime);
+        }
+
+        base.Draw(gameTime);
+    }
+
+    public static void ChangeScene(Scene next)
+    {
+        if (s_activateScene != next)
+        {
+            s_nextScene = next;
+        }
+    }
+
+    private static void TransitionScene()
+    {
+        if (s_activateScene != null)
+        {
+            s_activateScene.Dispose();
+        }
+
+        GC.Collect();
+
+        s_activateScene = s_nextScene;
+
+        s_nextScene = null;
+
+        if (s_activateScene != null)
+        {
+            s_activateScene.Initialize();
+        }
     }
 }

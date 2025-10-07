@@ -9,11 +9,11 @@ namespace MonoGameLibrary.Audio;
 public class AudioController : IDisposable
 {
     private readonly List<SoundEffectInstance> _activeSoundEffectInstances;
-    private float _previousSongVolumen;
-    private float _previousSoundEffectVolumne;
+    private float _previousSongVolume;
+    private float _previousSoundEffectVolume;
     public bool IsMuted { get; private set; }
 
-    public float SongVolumen
+    public float SongVolume
     {
         get => IsMuted ? 0.0f : MediaPlayer.Volume;
         set
@@ -113,8 +113,8 @@ public class AudioController : IDisposable
 
     public void MuteAudio()
     {
-        _previousSongVolumen = MediaPlayer.Volume;
-        _previousSoundEffectVolumne = SoundEffect.MasterVolume;
+        _previousSongVolume = MediaPlayer.Volume;
+        _previousSoundEffectVolume = SoundEffect.MasterVolume;
 
         MediaPlayer.Volume = 0.0f;
         SoundEffect.MasterVolume = 0.0f;
@@ -124,8 +124,8 @@ public class AudioController : IDisposable
 
     public void UnmuteAudio()
     {
-        MediaPlayer.Volume = _previousSongVolumen;
-        SoundEffect.MasterVolume = _previousSoundEffectVolumne;
+        MediaPlayer.Volume = _previousSongVolume;
+        SoundEffect.MasterVolume = _previousSoundEffectVolume;
 
         IsMuted = false;
     }

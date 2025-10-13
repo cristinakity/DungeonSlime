@@ -1,15 +1,25 @@
 // Windows host variant (Docker Desktop / WSL2)
-// Copy of the main devcontainer with X11 specifics removed.
+// WSL2 has access to Linux audio systems, so we include audio support
 // VS Code will show a variant selection if multiple devcontainer.json files exist.
 {
-  "name": "MonoGame .NET 8 (Windows Host)",
+  "name": "MonoGame .NET 8 (Windows Host - WSL2)",
   "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0",
   "runArgs": [
-    // Enable GPU acceleration if available (optional)
-    // "--gpus=all",
-    "--device=/dev/dri:/dev/dri"
+    // Note: Controllers require USB passthrough setup in WSL2
+    // See: https://docs.microsoft.com/en-us/windows/wsl/connect-usb
+    "--ipc=host"
   ],
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "containerEnv": {
+    "DISPLAY": ":0",
+    "XDG_RUNTIME_DIR": "/run/user/1000",
+    "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus",
+    "PULSE_SERVER": "unix:/run/user/1000/pulse/native"
+  },
+  "remoteEnv": {
+    "DISPLAY": ":0",
+    "XDG_RUNTIME_DIR": "/run/user/1000"
+  },
+  "postCreateCommand": "bash .devcontainer/windows/post-create-windows.sh",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -17,12 +27,15 @@
         "ms-dotnettools.csharp",
         "aaron-bond.better-comments",
         "r88.monogame",
-				"redhat.vscode-xml"
+        "redhat.vscode-xml"
       ]
     }
   },
   "mounts": [
-    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+    "source=/run/user/1000,target=/run/user/1000,type=bind",
+    "source=/mnt/wslg,target=/mnt/wslg,type=bind",
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind"
   ],
-  "onCreateCommand": "echo 'Using Windows host variant (no X11 socket mounts needed).'"
+  "onCreateCommand": "echo 'Using Windows host variant with WSL2 audio support. Controllers require USB passthrough setup.'"
 }
